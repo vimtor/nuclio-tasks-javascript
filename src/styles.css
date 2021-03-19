@@ -1,0 +1,9 @@
+.title {
+  all: unset;
+  color: red;
+  font-size: 64px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}

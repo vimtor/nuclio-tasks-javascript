@@ -10,7 +10,7 @@ function getInitialTasks() {
   if (storedTasks) {
     return storedTasks.split(",");
   }
-  pendingTasks();
+  updatePendingTasks();
   return [];
 }
 
@@ -21,11 +21,11 @@ function createItem(title) {
     list.removeChild(item);
     tasks = tasks.filter((task) => task !== title);
     localStorage.setItem("tasks", tasks);
-    pendingTasks();
+    updatePendingTasks();
   });
 
   list.append(item);
-  pendingTasks();
+  updatePendingTasks();
 }
 
 function clearInput() {
@@ -46,10 +46,10 @@ function saveTask(title) {
   localStorage.setItem("tasks", tasks);
 }
 
-function pendingTasks(){
+function updatePendingTasks(){
   const storedTasks = localStorage.getItem("tasks");
   let storedTasksArray = [];
-  console.log(storedTasks);
+
   if (storedTasks) {
     storedTasksArray = storedTasks.split(",");
     pending.innerText = storedTasksArray.length;
@@ -62,10 +62,10 @@ function pendingTasks(){
 
 let tasks = getInitialTasks();
 
-tasks.forEach(task => {
-  createItem(task);
-  pendingTasks();
-});
+
+tasks.forEach(createItem);
+
+
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -77,5 +77,5 @@ form.addEventListener("submit", (event) => {
   } else {
     setError("Your task cannot be empty");
   }
-  pendingTasks();
+  updatePendingTasks();
 });

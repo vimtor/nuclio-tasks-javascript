@@ -2,12 +2,15 @@ const input = document.querySelector("input");
 const form = document.querySelector("form");
 const list = document.querySelector("ul");
 const error = document.querySelector(".error");
+const pending = document.querySelector("span");
+
 
 function getInitialTasks() {
   const storedTasks = localStorage.getItem("tasks");
   if (storedTasks) {
     return storedTasks.split(",");
   }
+  updatePendingTasks();
   return [];
 }
 
@@ -18,9 +21,11 @@ function createItem(title) {
     list.removeChild(item);
     tasks = tasks.filter((task) => task !== title);
     localStorage.setItem("tasks", tasks);
+    updatePendingTasks();
   });
 
   list.append(item);
+  updatePendingTasks();
 }
 
 function clearInput() {
@@ -41,9 +46,26 @@ function saveTask(title) {
   localStorage.setItem("tasks", tasks);
 }
 
+function updatePendingTasks(){
+  const storedTasks = localStorage.getItem("tasks");
+  let storedTasksArray = [];
+
+  if (storedTasks) {
+    storedTasksArray = storedTasks.split(",");
+    pending.innerText = storedTasksArray.length;
+  }
+  else{
+    pending.innerText = 0;
+  }
+}
+
+
 let tasks = getInitialTasks();
 
+
 tasks.forEach(createItem);
+
+
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -55,4 +77,5 @@ form.addEventListener("submit", (event) => {
   } else {
     setError("Your task cannot be empty");
   }
+  updatePendingTasks();
 });
